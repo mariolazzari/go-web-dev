@@ -40,8 +40,7 @@ func main() {
 [Github](https://github.com/gin-gonic/gin)
 
 ```sh
-mkdir 03-gin
-cd 03-gin
+mkdir 03-gin && cd 03-gin
 go mod init github.com/mariolazzari/go-web-dev/gin
 go get -u github.com/gin-gonic/gin
 ```
@@ -74,3 +73,58 @@ func main() {
 ```
 
 ## Enviroment setup
+
+[godotenv](https://github.com/joho/godotenv)
+
+```sh
+mkdir 04-env && cd 04-env
+go mod init github.com/mariolazzari/go-web-dev/env
+go get -u github.com/gin-gonic/gin
+go get github.com/joho/godotenv
+```
+
+```go
+package config
+
+import (
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+)
+
+type envConfig struct {
+	AppPort string
+}
+
+func (e *envConfig) LoadConfig() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Panic("Env file not loaded")
+	}
+
+	e.AppPort = loadString("APP_PORT", "8080")
+}
+
+var Config envConfig
+
+func loadString(key, fallback string) string {
+	val, ok := os.LookupEnv(key)
+	if !ok {
+		log.Printf("Missing var: %s", key)
+		return fallback
+	}
+
+	return val
+}
+
+func init() {
+	Config.LoadConfig()
+}
+```
+
+### Postgres
+
+```go
+
+```
