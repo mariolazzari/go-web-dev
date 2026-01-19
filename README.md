@@ -213,6 +213,67 @@ func SaveTask(ctx *gin.Context) {
 
 ### Data migration
 
-```go
+[migrate](https://github.com/golang-migrate/migrate)
 
+```sh
+go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+migrate create -ext sql -dir db/migrations -seq create_task_table
 ```
+
+```sql
+DROP TABLE IF EXISTS tasks;
+
+CREATE TABLE tasks (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP(0) WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+```
+
+### Saving data
+
+```go
+package handlers
+
+import (
+	"context"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mariolazzari/go-web-dev/db"
+)
+
+type PostTaskPayload struct {
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Status      string `json:"status"`
+}
+
+// save task and return id
+func SaveTask(ctx *gin.Context) {
+	var payload PostTaskPayload
+
+	err := ctx.ShouldBindJSON(&payload)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid body"})
+		return
+	}
+
+	var id int
+	query := `Insert into tasks (title, description, status) VALUES ($1, $2, $3) RETURNING id;`
+
+	err = db.DB.QueryRow(context.Background(), query, payload.Title, payload.Description, payload.Status).Scan(&id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": true, "message": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"error": false, "id": id})
+}
+```
+
+## Code hygiene
+
+### Cleaning code

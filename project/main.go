@@ -16,5 +16,6 @@ func main() {
 		Handler: handler,
 	}
 
+	defer db.DB.Close()
 	server.ListenAndServe()
 }
