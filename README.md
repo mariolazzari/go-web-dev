@@ -182,25 +182,37 @@ air
 
 ## POST request
 
+### Data validation
+
 ```go
-package routes
+package handlers
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mariolazzari/go-web-dev/routes/handlers"
 )
 
-func MountRoutes() *gin.Engine {
-	handler := gin.Default()
-
-	handler.GET("/", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"message": "Ciao Mario"})
-	})
-
-	handler.POST("/tasks", handlers.SaveTask)
-
-	return handler
+type PostTaskPayload struct {
+	Title       string `json:"title" binding:"required"`
+	Description string `json:"description" binding:"required"`
+	Status      string `json:"status"`
 }
+
+func SaveTask(ctx *gin.Context) {
+	var payload PostTaskPayload
+
+	err := ctx.ShouldBindJSON(&payload)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid body"})
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{"error": false, "title": payload.Title})
+}
+```
+
+### Data migration
+
+```go
+
 ```
