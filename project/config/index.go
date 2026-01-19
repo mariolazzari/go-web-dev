@@ -30,7 +30,6 @@ func init() {
 
 func loadString(key string, fallback string) string {
 	val, ok := os.LookupEnv(key)
-
 	if !ok {
 		log.Panicf("Key %s is not loaded", key)
 		return fallback
