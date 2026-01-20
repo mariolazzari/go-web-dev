@@ -20,8 +20,8 @@ func SaveTask(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Unable to read the body"})
 		return
 	}
-	id, err := db.TaskRepository.SaveTaskQuery(payload)
 
+	id, err := db.TaskRepository.SaveTaskQuery(payload)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": true, "msg": err.Error()})
 		return

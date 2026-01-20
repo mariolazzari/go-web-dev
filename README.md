@@ -306,3 +306,59 @@ func (t *Task) SaveTaskQuery(payload PostTaskPayload) (int, error) {
 	return id, nil
 }
 ```
+
+### Makefile
+
+```sh
+include .env
+
+MIGRATIONS_PATH = ./db/migrations
+
+.PHONY: migrate-create
+migrate-create:
+	@migrate create -seq -ext sql -dir $(MIGRATIONS_PATH) $(filter-out $@,$(MAKECMDGOALS))
+
+.PHONY: migrate-up
+migrate-up:
+	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_PATH) up
+
+.PHONY: migrate-down
+migrate-down:
+	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_PATH) down $(filter-out $@,$(MAKECMDGOALS))
+```
+
+### Route not found
+
+```go
+package routes
+
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/mariolazzari/go-web-dev/routes/handlers"
+)
+
+func MountRoutes() *gin.Engine {
+	handler := gin.Default()
+
+	handler.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{"message": "Ciao Mario"})
+	})
+
+	handler.POST("/tasks", handlers.SaveTask)
+	handler.NoRoute(func(ctx *gin.Context) {
+		ctx.JSON(http.StatusNotFound, gin.H{"message": "Route not found"})
+	})
+
+	return handler
+}
+```
+
+## Read, update and delete APIs
+
+### Get tasks
+
+```go
+
+```
