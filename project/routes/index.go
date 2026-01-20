@@ -8,10 +8,15 @@ import (
 func MountRoutes() *gin.Engine {
 	handler := gin.Default()
 
+	// root handlers
 	handler.GET("/", handlers.RootHandler)
 	handler.NoRoute(handlers.NoRouteHandler)
-
-	handler.POST("/tasks", handlers.SaveTask)
+	// task group
+	taskRoutes := handler.Group("/tasks")
+	{
+		taskRoutes.GET("/", handlers.GetTasks)
+		taskRoutes.POST("/", handlers.SaveTask)
+	}
 
 	return handler
 }
