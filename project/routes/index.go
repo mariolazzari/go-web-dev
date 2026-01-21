@@ -11,6 +11,7 @@ func MountRoutes() *gin.Engine {
 	// root handlers
 	handler.GET("/", handlers.RootHandler)
 	handler.NoRoute(handlers.NoRouteHandler)
+
 	// task group
 	taskRoutes := handler.Group("/tasks")
 	{
@@ -18,6 +19,13 @@ func MountRoutes() *gin.Engine {
 		taskRoutes.POST("/", handlers.AddTask)
 		taskRoutes.PATCH("/", handlers.UpdateTask)
 		taskRoutes.DELETE("/:id", handlers.DeleteTask)
+	}
+
+	// auth group
+	authRoutes := handler.Group("/login")
+	{
+		authRoutes.GET("/google/login", handlers.HandleGoogleLogin)
+		authRoutes.GET("/google/callback", handlers.HandleGoogleCallback)
 	}
 
 	return handler

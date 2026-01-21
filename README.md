@@ -466,3 +466,21 @@ func DeleteTask(c *gin.Context) {
 }
 
 ```
+
+## Authentication
+
+### Golang Oauth2
+
+[oauth2](https://github.com/golang/oauth2)
+[go package](https://pkg.go.dev/golang.org/x/oauth2)
+
+```sh
+go get golang.org/x/oauth2
+go get golang.org/x/oauth2/google
+```
+
+### JWT token
+
+```sh
+go get -u github.com/golang-jwt/jwt/v5
+```

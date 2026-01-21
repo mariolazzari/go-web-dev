@@ -8,8 +8,12 @@ import (
 )
 
 type envConfig struct {
-	AppPort string
-	DbPath  string
+	AppPort             string
+	DbPath              string
+	GoogleClientID      string
+	GoogleClientSeceret string
+	GoogleRedirectURL   string
+	JWTSaltKey          string
 }
 
 func (e *envConfig) LoadConfig() {
@@ -20,6 +24,10 @@ func (e *envConfig) LoadConfig() {
 
 	e.AppPort = loadString("APP_PORT", ":8080")
 	e.DbPath = loadString("DB_PATH", "postgres://postgres:adminPassword@localhost:5433/tasks?sslmode=disable")
+	e.GoogleClientID = loadString("GOOGLE_CLIENT_ID", "")
+	e.GoogleClientSeceret = loadString("GOOGLE_CLIENT_SECRET", "")
+	e.GoogleRedirectURL = loadString("GOOGLE_REDIRECT_URL", "")
+	e.JWTSaltKey = loadString("JWT_SALT_KEY", "hi_test_salt")
 }
 
 var Config envConfig
