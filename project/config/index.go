@@ -14,6 +14,7 @@ type envConfig struct {
 	GoogleClientSeceret string
 	GoogleRedirectURL   string
 	JWTSaltKey          string
+	FEOriginURL         string
 }
 
 func (e *envConfig) LoadConfig() {
@@ -28,6 +29,7 @@ func (e *envConfig) LoadConfig() {
 	e.GoogleClientSeceret = loadString("GOOGLE_CLIENT_SECRET", "")
 	e.GoogleRedirectURL = loadString("GOOGLE_REDIRECT_URL", "")
 	e.JWTSaltKey = loadString("JWT_SALT_KEY", "hi_test_salt")
+	e.FEOriginURL = loadString("FEOriginURL", "http://localhost:3000")
 }
 
 var Config envConfig
