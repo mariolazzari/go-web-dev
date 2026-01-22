@@ -643,3 +643,18 @@ func AuthorizationMiddleWare() gin.HandlerFunc {
 	}
 }
 ```
+
+## Deploying
+
+### Server load testing
+
+```sh
+brew install hey
+hey -n 500 -c 10 http://localhost:5000/task
+```
+
+### Github actions
+
+```
+
+```
